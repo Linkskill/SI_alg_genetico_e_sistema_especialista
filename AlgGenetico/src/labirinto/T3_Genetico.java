@@ -15,7 +15,7 @@ import java.util.Scanner;
  *
  * @author Gabriel Eugenio, Lincoln Batista e Jorge Straub
  */
-public class T1_Labirinto {
+public class T3_Genetico {
     /**
      * @param args the command line arguments
      */

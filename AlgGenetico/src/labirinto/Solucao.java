@@ -27,4 +27,15 @@ class Solucao {
     public void calculaFitness() {
         
     }
+    public int getFitness() { return fitness; }
+
+    public void mutacao() {
+        escolhe uma coordenada qualquer, faz X ou Y +- 1 ou 2
+    }
+    public Solucao cruzar(Solucao other) {
+        
+        
+        return filho;
+    }
+
 }

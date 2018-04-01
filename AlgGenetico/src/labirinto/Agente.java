@@ -57,7 +57,9 @@ public class Agente {
         {
             geracao++;
             // maisAptos = seleciona n com maior fitness da populacao;
-            // recombina maisAptos, com chance pequena (de 1 até 5%) de mutacao
+            // calcula aptidao usando aquilo da roleta (pra ver as chances de cada
+            //  um ser escolhido nos cruzamentos
+            // cruza pares de maisAptos, com chance pequena (de 1 até 5%) de mutacao
             // populacao.remove(maisFracos);
             // populacao.add(filhos);
             for (Solucao s : populacao)
