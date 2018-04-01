@@ -3,12 +3,7 @@
 To-Do List:
 
 ( ) Implementar algoritmo genético
-	( ) Iniciar população
-	( ) Calcular fitness
-	( ) Cruzamento de 2 indivíduos
-		( ) Função de aptidão para definir porcentagem de ser escolhido nos cruzamentos
-	( ) Mutação
-	( ) Definir próxima geração
-		Testar vários jeitos, depois ver qual o melhor
-		( ) Simplesmente esquece os pais, fica com os N melhores filhos
-		( ) Independente de ser pai ou filho, fica com os N melhores
+      - População de indivíduos em localizações aleatórias do labirinto
+      - Cruzamento -> dar respawn de um novo indivíduo na distância média entre outros dois indivíduos
+      - Mutação -> novo indvíduo recebe coordenadas diferenciadas, cada vez mais próximas da saída do labirinto
+      - Adequação (fitness) -> indivíduos com coordenadas longe da saída "morrem" e os com coordenadas próximas da saída sobrevivem
