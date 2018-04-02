@@ -11,9 +11,9 @@ To-Do List:
 			C3 = (4,3) (9,9) (6,6)
 			...
 
-		Imagine desenhar linhas retas indo do início até a 1a coordenada, da 1a pra 2a (se tiver) ... da última até a saída. O caminho propriamente dito é composto das posições (y,x) na grid que essa reta passa por cima.
-
+		
 	( ) Calcular fitness
+		Imagine desenhar linhas retas indo do início até a 1a coordenada, da 1a pra 2a (se tiver) ... da última até a saída. O caminho propriamente dito é composto das posições (y,x) na grid que essa reta passa por cima.
 		Quanto menor o valor, mais adequado/apto é.
 		Fitness de um caminho = número de passos + numParedes*(algumPeso)
 		(quanto mais paredes, pior o fitness)
