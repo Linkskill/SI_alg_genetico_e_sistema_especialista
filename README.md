@@ -23,7 +23,7 @@ To-Do List:
 		Pra juntar 2 caminhos:
 		( ) Se eles tem o mesmo número de coordenadas
 			Para cada par de coordenadas (uma de cada caminho), a coordenada (y,x) do caminho novo é (média dos Y, média dos X)
-		( ) Se tem número de coordenadas diferentes (por exemplo: 1 caminho passa por 1 coordenada, outro passa por 3)
+		( ) Se tem número de coordenadas diferentes (por exemplo: 1 caminho passa por 1 coordenada, outro passa por 3) ->Lincoln
 			De duas uma: ou combina cada uma das 3 coordenadas com a única do outro caminho, ou escolhe uma das 3 pra combinar e ignora as outras
 		
 	( ) Mutação -> Lincoln
