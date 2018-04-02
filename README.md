@@ -26,7 +26,7 @@ To-Do List:
 		( ) Se tem número de coordenadas diferentes (por exemplo: 1 caminho passa por 1 coordenada, outro passa por 3)
 			De duas uma: ou combina cada uma das 3 coordenadas com a única do outro caminho, ou escolhe uma das 3 pra combinar e ignora as outras
 		
-	( ) Mutação
+	( ) Mutação -> Lincoln
 		Tem chance pequena de acontecer (1-5%).
 		Altera levemente (+- 1 ou 2) o X ou o Y de uma das coordenadas do caminho.
 		
