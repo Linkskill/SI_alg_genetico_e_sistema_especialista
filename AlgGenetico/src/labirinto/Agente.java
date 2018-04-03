@@ -9,6 +9,7 @@ package labirinto;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
+import java.util.Random;
 
 /**
  *
@@ -45,25 +46,38 @@ public class Agente {
     }
 
     public void algGenetico() {
-        int geracao = 0;
-        PriorityQueue<Solucao> populacao = new PriorityQueue<>(10, new SolucaoComparator());
+        int geracao = 0, num;
+        Random rand = new Random();
+        
+        PriorityQueue<Caminho> populacao = new PriorityQueue<>(10, new SolucaoComparator());
         // Sempre tira os mais aptos (valor mais alto)
         
         inicializaPopulacao();
-        for(Solucao s : populacao)
+        for(Caminho s : populacao)
             s.calculaFitness();
         
-        while (!condicao_de_parada)
+        // Condiçao de parada -> numero de geraçoes
+        while (geracao < 10)
         {
             geracao++;
+            
             // maisAptos = seleciona n com maior fitness da populacao;
             // calcula aptidao usando aquilo da roleta (pra ver as chances de cada
             //  um ser escolhido nos cruzamentos
             // cruza pares de maisAptos, com chance pequena (de 1 até 5%) de mutacao
             // populacao.remove(maisFracos);
             // populacao.add(filhos);
-            for (Solucao s : populacao)
+        
+            for(Caminho s : populacao)
+            {
                 s.calculaFitness();
+                
+                num = rand.nextInt(99);
+                if(num < 1)
+                {
+                    s.mutacao();
+                }
+            }
         }
     }
     public void inicializaPopulacao() {

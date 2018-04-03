@@ -11,9 +11,9 @@ import java.util.Comparator;
  *
  * @author Gabriel Eugenio, Lincoln Batista e Jorge Straub
  */
-public class SolucaoComparator implements Comparator<Solucao> {
+public class SolucaoComparator implements Comparator<Caminho> {
     @Override
-    public int compare(Solucao s1, Solucao s2) {
+    public int compare(Caminho s1, Caminho s2) {
         //https://docs.oracle.com/javase/7/docs/api/java/util/PriorityQueue.html
         //O primeiro elemento de PriorityQueue é o menor elemento
         // em relação à ordem especificada. Se a ordem é natural,
