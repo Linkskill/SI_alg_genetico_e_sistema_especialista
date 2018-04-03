@@ -109,6 +109,8 @@ public class Labirinto {
     public void setAgente(Agente a){
         agente = a;
     }
+    public int getAltura() { return altura; }
+    public int getLargura() { return largura; }
     public Estado getStart(){ return start; }
     public Estado getExit() { return exit; }
 }

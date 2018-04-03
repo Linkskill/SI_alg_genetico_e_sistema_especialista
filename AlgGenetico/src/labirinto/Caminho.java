@@ -16,19 +16,23 @@ class Caminho {
     private ArrayList<Coordenada> pontosIntermediarios;
     private int fitness;
     
-    public Caminho () {
+    public Caminho (int alt, int larg) {
+        pontosIntermediarios = new ArrayList<>();
+        randomPoints(alt, larg);
+        fitness = Integer.MAX_VALUE;
+    }
+    private void randomPoints (int alt, int larg) {
         // escolhe um numero aleatorio de 1 a 3 (numero de pontos intermediarios)
         Random rand = new Random();
         int num = rand.nextInt(3);
+        int x,y;
         
-        
-        for (int i=0; i < num; i++){
-            x = aleatorio
-            y = aleatorio
+        for (int i=0; i < num; i++)
+        {
+            x = rand.nextInt(larg);
+            y = rand.nextInt(alt);
             pontosIntermediarios.add(new Coordenada(y, x));
         }
-        
-        fitness = Integer.MAX_VALUE;
     }
     public void calculaFitness() {
         
@@ -39,6 +43,8 @@ class Caminho {
         // escolhe uma coordenada qualquer, faz X ou Y +- 1 ou 2
         Random rand = new Random();
         int num = rand.nextInt(2);
+        //Se for adicionar um ponto novo, tem que tirar um antigo. O x e o y que
+        //vai usar são esses do antigo +- num
         pontosIntermediarios.add(new Coordenada(y+num, x+num));
         
     }

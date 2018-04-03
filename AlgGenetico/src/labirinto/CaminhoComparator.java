@@ -11,7 +11,7 @@ import java.util.Comparator;
  *
  * @author Gabriel Eugenio, Lincoln Batista e Jorge Straub
  */
-public class SolucaoComparator implements Comparator<Caminho> {
+public class CaminhoComparator implements Comparator<Caminho> {
     @Override
     public int compare(Caminho s1, Caminho s2) {
         //https://docs.oracle.com/javase/7/docs/api/java/util/PriorityQueue.html

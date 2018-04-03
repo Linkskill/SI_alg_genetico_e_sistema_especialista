@@ -46,13 +46,13 @@ public class Agente {
     }
 
     public void algGenetico() {
-        int geracao = 0, num;
+        int geracao = 0;
         Random rand = new Random();
         
-        PriorityQueue<Caminho> populacao = new PriorityQueue<>(10, new SolucaoComparator());
+        PriorityQueue<Caminho> populacao = new PriorityQueue<>(10, new CaminhoComparator());
         // Sempre tira os mais aptos (valor mais alto)
         
-        inicializaPopulacao();
+        inicializaPopulacao(populacao);
         for(Caminho s : populacao)
             s.calculaFitness();
         
@@ -72,16 +72,24 @@ public class Agente {
             {
                 s.calculaFitness();
                 
-                num = rand.nextInt(99);
-                if(num < 1)
+                if(rand.nextInt(99) < 1)
                 {
                     s.mutacao();
                 }
             }
         }
     }
-    public void inicializaPopulacao() {
+    private void inicializaPopulacao(PriorityQueue<Caminho> populacao) {
+        int alt = labirinto.getAltura();
+        int larg = labirinto.getLargura();
         
+        Caminho individuo;
+        for(int i=0; i<10; i++)
+        {
+            individuo = new Caminho(alt, larg);
+            individuo.calculaFitness();
+            populacao.add(individuo);
+        }
     }
     /**
      * Faz o agente percorrer a solução encontrada.
