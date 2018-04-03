@@ -70,16 +70,25 @@ class Caminho {
 
     public void mutacao() {
         // escolhe uma coordenada qualquer, faz X ou Y +- 1 ou 2
+        // tem que modificar um ponto existente, não criar outro
+        // se não der certo assim tenta remover da lista, fazer mutação e colocar de novo
         Random rand = new Random();
-        int num = rand.nextInt(2);
-        //tem que modificar um ponto existente, não criar outro
-        //se não der certo assim tenta remover da lista, fazer mutação e colocar de novo
-//        int index = rand.nextInt(pontosIntermediarios.getSize());
-//        Ponto aSerMutado = pontosIntermediarios.get(i);
-//        int y = aSerMutado.getY()
-//        int x = aSerMutado.getX()
-//        aSerMutado.setY(y);
-//        aSerMutado.setX(x);
+        int num = rand.nextInt(5);
+        int index = rand.nextInt(pontosIntermediarios.size());
+        Ponto mutante = pontosIntermediarios.get(index);
+        int y = mutante.getY();
+        int x = mutante.getX();
+        
+        if(y+num-2 > 0 && x+num-2 > 0){
+            mutante.setY(y+num-2);
+            mutante.setX(x+num-2);
+        }
+        else{
+            num = rand.nextInt(3);
+            mutante.setY(y+num);
+            mutante.setX(x+num);
+        }
+        
     }
     public Caminho cruzar(Caminho other) {
         Caminho filho = new Caminho();
