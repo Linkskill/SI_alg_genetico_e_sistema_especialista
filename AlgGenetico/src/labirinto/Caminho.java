@@ -21,8 +21,12 @@ class Caminho {
         randomPoints(alt, larg);
         fitness = Integer.MAX_VALUE;
     }
+    /**
+     * Inicializa os pontos intermediários com até 3 coordenadas.
+     * @param alt Valor máximo de Y
+     * @param larg Valor máximo de X
+     */
     private void randomPoints (int alt, int larg) {
-        // escolhe um numero aleatorio de 1 a 3 (numero de pontos intermediarios)
         Random rand = new Random();
         int num = rand.nextInt(3);
         int x,y;
