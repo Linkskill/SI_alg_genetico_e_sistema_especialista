@@ -12,14 +12,14 @@ import java.util.Objects;
  * @author Gabriel Eugenio, Lincoln Batista e Jorge Straub
  */
 public class Estado {
-    private final Coordenada coordenada;
+    private final Ponto coordenada;
     
     public Estado (int y, int x){
-        coordenada = new Coordenada(y, x);
+        coordenada = new Ponto(y, x);
     }
     public int getY() { return coordenada.getY(); }
     public int getX() { return coordenada.getX(); }
-    public Coordenada getCoordenada() { return coordenada; }
+    public Ponto getCoordenada() { return coordenada; }
 
     @Override
     public String toString(){

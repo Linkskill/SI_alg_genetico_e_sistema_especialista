@@ -97,7 +97,7 @@ public class Labirinto {
      * @return True se é acessível, false se está fora dos
      *         limites ou se é uma parede.
      */
-    public boolean isAccessible(Coordenada coordenada) {
+    public boolean isAccessible(Ponto coordenada) {
         int row = coordenada.getY();
         int col = coordenada.getX();
         boolean estaForaDosLimites = row < 0 || col < 0

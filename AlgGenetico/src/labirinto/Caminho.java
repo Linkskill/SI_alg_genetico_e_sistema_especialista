@@ -13,50 +13,85 @@ import java.util.Random;
  * @author Saphira
  */
 class Caminho {
-    private ArrayList<Coordenada> pontosIntermediarios;
+    private ArrayList<Ponto> pontosIntermediarios;
     private int fitness;
     
-    public Caminho (int alt, int larg) {
+    public Caminho (int ymax, int xmax) {
         pontosIntermediarios = new ArrayList<>();
-        randomPoints(alt, larg);
+        
+        randomPontos(ymax, xmax);
+        fitness = Integer.MAX_VALUE;
+        
+        for(Ponto c : pontosIntermediarios)
+            System.out.print("(" + c.getY() + "," + c.getX() + ") ");
+        System.out.println();
+    }
+    public Caminho() {
+        pontosIntermediarios = new ArrayList<>();
         fitness = Integer.MAX_VALUE;
     }
     /**
-     * Inicializa os pontos intermediários com até 3 coordenadas.
-     * @param alt Valor máximo de Y
-     * @param larg Valor máximo de X
+     * Inicializa os pontos intermediários com até 3 coordenadas
+     * distinstas.
+     * @param numPontos Número de pontos a serem colocados no 
+     * @param ymax Valor máximo de Y
+     * @param xmax Valor máximo de X
      */
-    private void randomPoints (int alt, int larg) {
+    private void randomPontos (int ymax, int xmax) {
         Random rand = new Random();
-        int num = rand.nextInt(3);
+        int numPontos = rand.nextInt(3)+1; //de 1 a 3
         int x,y;
+        Ponto ponto;
         
-        for (int i=0; i < num; i++)
+        for (int i=1; i <= numPontos; i++)
         {
-            x = rand.nextInt(larg);
-            y = rand.nextInt(alt);
-            pontosIntermediarios.add(new Coordenada(y, x));
+            do {
+                x = rand.nextInt(ymax);
+                y = rand.nextInt(xmax);
+                ponto = new Ponto(y,x);
+            } while (pontosIntermediarios.contains(ponto));
+            
+            pontosIntermediarios.add(ponto);
         }
+    }
+    private void addPonto(Ponto p){
+        pontosIntermediarios.add(p);
+    }
+    public Ponto getPonto(int i){
+        if (i < pontosIntermediarios.size())
+            return pontosIntermediarios.get(i);
+        return null;
     }
     public void calculaFitness() {
         
     }
     public int getFitness() { return fitness; }
+    public int getSize() { return pontosIntermediarios.size(); }
 
     public void mutacao() {
         // escolhe uma coordenada qualquer, faz X ou Y +- 1 ou 2
         Random rand = new Random();
         int num = rand.nextInt(2);
-        //Se for adicionar um ponto novo, tem que tirar um antigo. O x e o y que
-        //vai usar são esses do antigo +- num
-        pontosIntermediarios.add(new Coordenada(y+num, x+num));
-        
+        //tem que modificar um ponto existente, não criar outro
+        //se não der certo assim tenta remover da lista, fazer mutação e colocar de novo
+//        int index = rand.nextInt(pontosIntermediarios.getSize());
+//        Ponto aSerMutado = pontosIntermediarios.get(i);
+//        int y = aSerMutado.getY()
+//        int x = aSerMutado.getX()
+//        aSerMutado.setY(y);
+//        aSerMutado.setX(x);
     }
     public Caminho cruzar(Caminho other) {
-        // Se algum deles coordenada repetida (ex. (1,1) (1,1))
-        // escolhe 1 deles e junta com o outro diferente
+        Caminho filho = new Caminho();
+        int mediaY, mediaX;
         
-        
+        if (getSize() == other.getSize())
+            for (int i=0; i < getSize(); i++)
+            {
+                mediaY = (getPonto(i).getY() + other.getPonto(i).getY()) / 2;
+                mediaX = (getPonto(i).getX() + other.getPonto(i).getX()) / 2;
+                filho.addPonto(new Ponto(mediaY, mediaX));
+            }
         
         return filho;
     }

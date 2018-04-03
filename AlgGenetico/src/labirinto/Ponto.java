@@ -9,25 +9,31 @@ package labirinto;
  *
  * @author Gabriel Eugenio, Lincoln Batista e Jorge Straub
  */
-public class Coordenada {
-    private final int x;
-    private final int y;
+public class Ponto {
+    private int x;
+    private int y;
     
-    public Coordenada(int y, int x){
+    public Ponto(int y, int x){
         this.y = y;
         this.x = x;
     }
     public int getX(){ return x; }
     public int getY(){ return y; }
+    public void setX(int x) {
+        this.x = x;
+    }
+    public void setY(int y) {
+        this.y = y;
+    }
 
     @Override
     public String toString() {
-        return "(" + y + ", " + x + ")";
+        return "(" + getY() + ", " + getX() + ")";
     }
     @Override
     public boolean equals(Object other){
-        Coordenada coord = (Coordenada)other;
-        if (x == coord.getX() && y == coord.getY())
+        Ponto coord = (Ponto)other;
+        if (getX() == coord.getX() && getY() == coord.getY())
             return true;
         return false;
     }
@@ -35,8 +41,8 @@ public class Coordenada {
     //Sempre que der Override no equals() precisa dar no hashCode() também
     public int hashCode() {
         int hash = 5;
-        hash = 13 * hash + this.x;
-        hash = 13 * hash + this.y;
+        hash = 13 * hash + this.getX();
+        hash = 13 * hash + this.getY();
         return hash;
     }
 }
