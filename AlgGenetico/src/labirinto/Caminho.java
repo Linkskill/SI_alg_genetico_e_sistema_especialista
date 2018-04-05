@@ -66,7 +66,7 @@ class Caminho {
     /**
      * Escolhe uma coordenada qualquer, faz X ou Y +- 1 ou 2
      */
-    public void mutacao() {
+    public void mutacao(int altura, int largura) {
         // tem que modificar um ponto existente, não criar outro
         // se não der certo assim tenta remover da lista, fazer mutação e colocar de novo
         Random rand = new Random();
@@ -77,11 +77,12 @@ class Caminho {
         int y = mutante.getY();
         int x = mutante.getX();
         
-        if(y+num-2 > 0 && x+num-2 > 0){
+        if(y+num-2 > 0 && x+num-2 > 0 && 
+                y+num-2 < altura && x+num-2 < largura){
             mutante.setY(y+num-2);
             mutante.setX(x+num-2);
         }
-        else{
+        else if(y+num < altura && x+num < largura){
             num = rand.nextInt(3);
             mutante.setY(y+num);
             mutante.setX(x+num);
