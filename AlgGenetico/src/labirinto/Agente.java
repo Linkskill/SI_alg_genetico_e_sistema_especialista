@@ -74,7 +74,7 @@ public class Agente {
                 
                 if(rand.nextInt(99) < 1)
                 {
-                    s.mutacao();
+                    s.mutacao(labirinto.getAltura(),labirinto.getLargura());
                 }
             }
         }
