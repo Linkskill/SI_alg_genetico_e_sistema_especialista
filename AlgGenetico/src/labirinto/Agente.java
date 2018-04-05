@@ -50,11 +50,11 @@ public class Agente {
         Random rand = new Random();
         
         PriorityQueue<Caminho> populacao = new PriorityQueue<>(10, new CaminhoComparator());
-        // Sempre tira os mais aptos (valor mais alto)
+        // Fila de prioridades com valores de fitness (menor valor = prioridade alta)
         
         inicializaPopulacao(populacao);
-        for(Caminho s : populacao)
-            s.calculaFitness();
+        for(Caminho individuo : populacao)
+            individuo.calculaFitness(labirinto);
         
         // Condiçao de parada -> numero de geraçoes
         while (geracao < 10)
@@ -87,7 +87,6 @@ public class Agente {
         for(int i=0; i<10; i++)
         {
             individuo = new Caminho(ymax, xmax);
-            individuo.calculaFitness();
             populacao.add(individuo);
         }
     }
