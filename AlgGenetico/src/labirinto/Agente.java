@@ -80,12 +80,9 @@ public class Agente {
         }
     }
     private void inicializaPopulacao(PriorityQueue<Caminho> populacao) {
-        Random rand = new Random();
-        
+        Caminho individuo;
         int ymax = labirinto.getAltura();
         int xmax = labirinto.getLargura();
-        int numPontos;
-        Caminho individuo;
         
         for(int i=0; i<10; i++)
         {

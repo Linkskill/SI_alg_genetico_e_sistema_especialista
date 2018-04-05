@@ -18,13 +18,8 @@ class Caminho {
     
     public Caminho (int ymax, int xmax) {
         pontosIntermediarios = new ArrayList<>();
-        
         randomPontos(ymax, xmax);
         fitness = Integer.MAX_VALUE;
-        
-        for(Ponto c : pontosIntermediarios)
-            System.out.print("(" + c.getY() + "," + c.getX() + ") ");
-        System.out.println();
     }
     public Caminho() {
         pontosIntermediarios = new ArrayList<>();
@@ -33,7 +28,6 @@ class Caminho {
     /**
      * Inicializa os pontos intermediários com até 3 coordenadas
      * distinstas.
-     * @param numPontos Número de pontos a serem colocados no 
      * @param ymax Valor máximo de Y
      * @param xmax Valor máximo de X
      */
@@ -43,19 +37,20 @@ class Caminho {
         int x,y;
         Ponto ponto;
         
-        for (int i=1; i <= numPontos; i++)
+        while(pontosIntermediarios.size() <= 3)
         {
-            do {
-                x = rand.nextInt(ymax);
-                y = rand.nextInt(xmax);
-                ponto = new Ponto(y,x);
-            } while (pontosIntermediarios.contains(ponto));
-            
-            pontosIntermediarios.add(ponto);
+            x = rand.nextInt(ymax);
+            y = rand.nextInt(xmax);
+            ponto = new Ponto(y,x);
+            addPonto(ponto);
         }
     }
-    private void addPonto(Ponto p){
+    private boolean addPonto(Ponto p){
+        if (pontosIntermediarios.contains(p))
+            return false;
+        
         pontosIntermediarios.add(p);
+        return true;
     }
     public Ponto getPonto(int i){
         if (i < pontosIntermediarios.size())
@@ -68,12 +63,15 @@ class Caminho {
     public int getFitness() { return fitness; }
     public int getSize() { return pontosIntermediarios.size(); }
 
+    /**
+     * Escolhe uma coordenada qualquer, faz X ou Y +- 1 ou 2
+     */
     public void mutacao() {
-        // escolhe uma coordenada qualquer, faz X ou Y +- 1 ou 2
         // tem que modificar um ponto existente, não criar outro
         // se não der certo assim tenta remover da lista, fazer mutação e colocar de novo
         Random rand = new Random();
         int num = rand.nextInt(5);
+        
         int index = rand.nextInt(pontosIntermediarios.size());
         Ponto mutante = pontosIntermediarios.get(index);
         int y = mutante.getY();
@@ -104,5 +102,4 @@ class Caminho {
         
         return filho;
     }
-
 }
