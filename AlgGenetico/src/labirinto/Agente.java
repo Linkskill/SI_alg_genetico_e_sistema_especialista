@@ -90,14 +90,14 @@ public class Agente {
                 System.out.print("Filho: ");
                 System.out.println(filho);
                 
-                //if(rand.nextInt(99) < 1) {
+                if(rand.nextInt(100) < 5) {
                     System.out.println("Teve mutação");
                     
                     filho.mutacao(labirinto.getAltura(), labirinto.getLargura());
 
                     System.out.print("Ficou: ");
                     System.out.println(filho+"\n");
-                //}
+                }
                 filho.calculaFitness(labirinto);
                 populacao.add(filho);
             }
