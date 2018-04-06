@@ -245,6 +245,51 @@ class Caminho {
                 mediaX = (getIntermediario(i).getX() + other.getIntermediario(i).getX()) / 2;
                 filho.addIntermediario(new Ponto(mediaY, mediaX));
             }
+        else {
+            if(getNumIntermediarios() == 0){
+                for (int i=0; i < other.getNumIntermediarios(); i++){
+                    mediaY = (getIntermediario(0).getY() + other.getIntermediario(i).getY()) / 2;
+                    mediaX = (getIntermediario(0).getX() + other.getIntermediario(i).getX()) / 2;
+                    filho.addIntermediario(new Ponto(mediaY, mediaX));
+                }
+            }
+            
+            else if(other.getNumIntermediarios() == 0){
+                for (int i=0; i < getNumIntermediarios(); i++){
+                    mediaY = (getIntermediario(i).getY() + other.getIntermediario(0).getY()) / 2;
+                    mediaX = (getIntermediario(i).getX() + other.getIntermediario(0).getX()) / 2;
+                    filho.addIntermediario(new Ponto(mediaY, mediaX));
+                }
+            }
+            
+            else if(getNumIntermediarios() == 1 && other.getNumIntermediarios() == 2){        
+                mediaY = (getIntermediario(0).getY() + other.getIntermediario(0).getY()) / 2;
+                mediaX = (getIntermediario(0).getX() + other.getIntermediario(0).getX()) / 2;
+                filho.addIntermediario(new Ponto(mediaY, mediaX));
+                
+                mediaY = (getIntermediario(1).getY() + other.getIntermediario(1).getY()) / 2;
+                mediaX = (getIntermediario(1).getX() + other.getIntermediario(1).getX()) / 2;
+                filho.addIntermediario(new Ponto(mediaY, mediaX));
+                
+                mediaY = (getIntermediario(1).getY() + other.getIntermediario(2).getY()) / 2;
+                mediaX = (getIntermediario(1).getX() + other.getIntermediario(2).getX()) / 2;
+                filho.addIntermediario(new Ponto(mediaY, mediaX));
+            }
+            
+            else if(getNumIntermediarios() == 2 && other.getNumIntermediarios() == 1){
+                mediaY = (getIntermediario(0).getY() + other.getIntermediario(0).getY()) / 2;
+                mediaX = (getIntermediario(0).getX() + other.getIntermediario(0).getX()) / 2;
+                filho.addIntermediario(new Ponto(mediaY, mediaX));
+                
+                mediaY = (getIntermediario(1).getY() + other.getIntermediario(1).getY()) / 2;
+                mediaX = (getIntermediario(1).getX() + other.getIntermediario(1).getX()) / 2;
+                filho.addIntermediario(new Ponto(mediaY, mediaX));
+                
+                mediaY = (getIntermediario(2).getY() + other.getIntermediario(1).getY()) / 2;
+                mediaX = (getIntermediario(2).getX() + other.getIntermediario(1).getX()) / 2;
+                filho.addIntermediario(new Ponto(mediaY, mediaX));
+            }
+        }
         
         return filho;
     }
