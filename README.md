@@ -4,7 +4,7 @@ To-Do List:
 
 Iniciar População
 	
-	( ) Iniciar população com N indivíduos (pode ser N=10, por exemplo) --> Gabriel
+	(X) Iniciar população com N indivíduos (pode ser N=10, por exemplo) --> Gabriel
 	
 		Um indivíduo é um caminho que vai do início até a saída. Mais especificamente, um conjunto de 1 a 3 coordenadas (y,x) em que o caminho passa.
 		
@@ -16,7 +16,7 @@ Iniciar População
 
 Adequabilidade (Fitness)
 
-	( ) Calcular Fitness --> Gabriel
+	(X) Calcular Fitness --> Gabriel
 	
 		Fitness de um caminho = número de passos + numParedes*(algumPeso)
 		(quanto mais paredes, pior o fitness)
@@ -29,17 +29,17 @@ Cruzamento de 2 indivíduos
 
 	( ) Função de aptidão para definir porcentagem de ser escolhido nos cruzamentos (aquilo lá da roleta) -> Jooj
 	
-	( ) Cruzamento de 2 caminhos com o mesmo número de coordenadas --> Gabriel
+	(X) Cruzamento de 2 caminhos com o mesmo número de coordenadas --> Gabriel
 	
 		Para cada par de coordenadas (uma de cada caminho), a coordenada (y,x) do caminho novo é (média dos Y, média dos X)
 		
-	( ) Cruzamento de caminhos com número diferente de coordenadas --> Lincoln
+	(X) Cruzamento de caminhos com número diferente de coordenadas --> Lincoln
 	
 		Por exemplo: 1 caminho passa por 1 coordenada, outro passa por 3, ou 1 caminho passa por 2 coordenadas e outro passa por 3)
 	
 Mutação
 
-	( ) Mutação --> Lincoln
+	(X) Mutação --> Lincoln
 	
 		Tem chance pequena de acontecer (1-5%).
 		Altera levemente (+- 1 ou 2) o X ou o Y de uma das coordenadas do caminho.
@@ -49,10 +49,10 @@ Mudança de gerações
 	( ) Definir próxima geração -> Jooj
 	
 		Testar vários jeitos, depois ver qual o melhor
-		( ) Simplesmente esquece os pais, fica com os N melhores filhos
+		( ) Simplesmente esquece os pais, fica com os N melhores filhos (nem precisa fazer se não quiser, a outra funciona bem)
 		
-		( ) Independente de ser pai ou filho, fica com os N melhores (deve funcionar melhor)
+		(X) Independente de ser pai ou filho, fica com os N melhores (deve funcionar melhor)
 	
 Condição de parada
 
-	Enquanto (geração < 10)
+	(X) Enquanto (geração < 10)
