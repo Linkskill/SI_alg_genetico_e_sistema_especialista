@@ -70,7 +70,7 @@ public class Agente {
         
             for(Caminho s : populacao)
             {
-                s.calculaFitness();
+                s.calculaFitness(labirinto);
                 
                 if(rand.nextInt(99) < 1)
                 {
