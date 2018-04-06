@@ -25,9 +25,9 @@ public class Labirinto {
         for(int i=0; i < altura; i++)
             for(int j=0; j < largura; j++)
                 if(cells[i][j] == 'S') 
-                    start = new Estado(i, j);
+                    start = new Estado(new Ponto(i, j));
                 else if(cells[i][j] == 'E')
-                    exit = new Estado(i, j);
+                    exit = new Estado(new Ponto(i, j));
         agente = null;
     }
     /**

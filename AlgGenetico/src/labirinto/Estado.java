@@ -14,8 +14,8 @@ import java.util.Objects;
 public class Estado {
     private final Ponto ponto;
     
-    public Estado (int y, int x){
-        ponto = new Ponto(y, x);
+    public Estado (Ponto p){
+        ponto = p;
     }
     public int getY() { return ponto.getY(); }
     public int getX() { return ponto.getX(); }

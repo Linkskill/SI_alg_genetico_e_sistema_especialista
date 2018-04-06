@@ -51,6 +51,7 @@ class Caminho {
             addIntermediario(ponto);
         }
     }
+    
     private boolean addIntermediario(Ponto p){
         if (pontosIntermediarios.contains(p) ||
               p.equals(pontoInicial) ||
@@ -66,12 +67,18 @@ class Caminho {
         return null;
     }
     public int getNumIntermediarios() { return pontosIntermediarios.size(); }
+    public ArrayList<Ponto> getCaminho() {
+        //como retornar uma cópia não modificável?
+        return pontosCaminho;
+    }
+    public int getNumPontosCaminho() { return pontosCaminho.size(); }
     
+
     /**
      * Calcula o fitness (adequabilidade) deste caminho.
      * Fitness depende do número de passos e número de
-     * paredes no caminho.
-     * Quanto menor o valor, mais adequado é.
+     * paredes no caminho. Quanto menor o valor, mais
+     * adequado é.
      * @param labirinto Labirinto a que o caminho pertence.
      */
     public void calculaFitness(Labirinto labirinto) {
@@ -83,14 +90,9 @@ class Caminho {
         montaCaminho(pontosQuePassa);
         
         fitness = pontosCaminho.size()-1;
-        
-        System.out.println("\n" + fitness);
-        
         for (Ponto p : pontosCaminho)
             if (!labirinto.isAccessible(p))
                 fitness += 10;
-        
-        System.out.println(fitness);
     }
     
     /**
@@ -100,11 +102,11 @@ class Caminho {
      */
     private void montaCaminho(ArrayList<Ponto> pontosQuePassa){
         Ponto p1, p2;
+        pontosCaminho.add(pontosQuePassa.get(0));
         for(int i=0; i < pontosQuePassa.size()-1; i++)
         {
             p1 = pontosQuePassa.get(i);
             p2 = pontosQuePassa.get(i+1);
-            pontosCaminho.add(p1);
             montaSegmentoCaminho(p1, p2);
             pontosCaminho.add(p2);
         }
@@ -134,43 +136,41 @@ class Caminho {
         double m = (double)variacaoY/variacaoX;
         //Equacao ponto-inclinação da reta: (y-y1) = m(x-x1)
         
-        //Como (y1,x1) já foi colocado no caminho, pula ele
-        x1 += incremX;
-        y1 += incremY;
-
         int x, y;
         
         if (variacaoX == 0) {
             //Linha vertical
-            for(y=y1; y != y2; y+=incremY)
-                pontosCaminho.add(new Ponto(x1, y));
+            for(y=y1+incremY; y != y2; y+=incremY)
+                pontosCaminho.add(new Ponto(y, x1));
         }
         else if (variacaoY == 0) {
             //Linha horizontal
-            for(x=x1; x != x2; x+=incremX)
-                pontosCaminho.add(new Ponto(x, y1));
+            for(x=x1+incremX; x != x2; x+=incremX)
+                pontosCaminho.add(new Ponto(y1, x));
         }
         else if (m == 1) {
             //Linha diagonal perfeita (quando x anda 1, y anda 1)
-            x = x1;
-            y = y1;
+            x = x1+incremX;
+            y = y1+incremY;
             while(x != x2 && y != y2)
             {
-                pontosCaminho.add(new Ponto(x, y));
+                pontosCaminho.add(new Ponto(y, x));
                 x+=incremX;
                 y+=incremY;
             }
         }
         else if (m < 1) {
-            //Diagonal com X variando mais do que Y
-            //Uma mesma linha y pode ter vários pontos
-            //pertencendo ao caminho
+            /* Diagonal com X variando mais do que Y
+                - Cada coluna x tem só um ponto no caminho
+                - Uma mesma linha y pode ter vários pontos
+                   pertencendo ao caminho
+                - Quando x aumenta em 1, y aumenta em m */
             double erro = m;
             
             y = y1;
-            for(x=x1; x != x2; x+=incremX)
+            for(x=x1+incremX; x != x2; x+=incremX)
             {
-                pontosCaminho.add(new Ponto(y,x));
+                pontosCaminho.add(new Ponto(y, x));
                 erro += m;
                 
                 if(erro >= 0.5) { //pulou pro próximo y
@@ -180,15 +180,17 @@ class Caminho {
             }
         }
         else if (m > 1) {
-            //Diagonal com Y variando mais
-            //Uma mesma coluna x pode ter vários pontos
-            //pertencendo ao caminho
+            /* Diagonal com Y variando mais
+                - Cada linha y tem só um ponto no caminho
+                - Uma mesma coluna x pode ter vários pontos
+                    pertencendo ao caminho
+                - Quando y aumenta em 1, x aumenta em 1.0/m */
             double erro = 1.0/m;
             
             x = x1;
-            for(y=y1; y != y2; y+=incremY)
+            for(y=y1+incremY; y != y2; y+=incremY)
             {
-                pontosCaminho.add(new Ponto(y,x));
+                pontosCaminho.add(new Ponto(y, x));
                 erro += 1.0/m;
                 
                 if(erro >= 0.5) { //pulou pro próximo x
@@ -201,43 +203,70 @@ class Caminho {
     public int getFitness() { return fitness; }
 
     /**
-     * Escolhe uma coordenada qualquer e altera levemente
-     * os valores de X e Y (soma ou subtrai 1 ou 2)
+     * Escolhe um dos pontos intermediários e altera levemente
+     * os valores de X e Y (soma ou subtrai 1 ou 2). Tanto a
+     * operação (soma ou subtração) quanto o valor (1 ou 2)
+     * pode ser diferente do X pro Y.
+     * Ex: soma +1 no X, subtrai -2 do Y
      */
     public void mutacao(int altura, int largura) {
         Random rand = new Random();
-        int num;
+        
+        //Escolhe o quanto o X vai mudar
+        int alteracaoX;
         do {
-            num = rand.nextInt(5)-2; //-2 até 2
-        } while (num == 0);
+            alteracaoX = rand.nextInt(5)-2; //-2 até 2
+        } while (alteracaoX == 0);
         
+        //Escolhe o quanto o Y vai mudar
+        int alteracaoY;
+        do {
+            alteracaoY = rand.nextInt(5)-2; //-2 até 2
+        } while (alteracaoY == 0);
+        
+        //Escolhe um dos pontos intermediários pra mudar
         int index = rand.nextInt(pontosIntermediarios.size());
-        Ponto mutante = pontosIntermediarios.get(index);
-        int y = mutante.getY();
-        int x = mutante.getX();
+        Ponto escolhido = pontosIntermediarios.get(index);
+        int y = escolhido.getY();
+        int x = escolhido.getX();
         
-        /* Faz separado pra X e Y (ie. pode somar em um e
-        subtrair no outro).
-           Tenta alterar, se sair dos limites tenta com sinal
-        negativo. Se com sinal negativo também sair, ignora
-        (ou talvez poderia escolher outro ponto? Não faz
-        muita diferença, só não vai conseguir fazer a
-        mutação se a grid for muito pequena (< 5x5) */
-        if(y+num >= 0 && y+num < altura)
-            mutante.setY(y+num);
-        else if (y-num >= 0 && y+num < altura)
-            mutante.setY(y-num);
+        Ponto mutante = new Ponto(y,x);
+        //Verifica se a alteração iria sair do grid,
+        //se iria então tenta com sinal invertido.
+
+        //Se com sinal invertido também sairia da grid,
+        //não modifica (pode acontecer quando alguma
+        //das dimensões da grid é < 4)
+        if(y+alteracaoY >= 0 && y+alteracaoY < altura)
+            mutante.setY(y+alteracaoY);
+        else if (y-alteracaoY >= 0 && y-alteracaoY < altura)
+            mutante.setY(y-alteracaoY);
         
-        if(x+num >= 0 && x+num < largura)
-            mutante.setX(x+num);
-        else if (x-num >= 0 && x+num < largura)
-            mutante.setX(x-num);
+        if(x+alteracaoX >= 0 && x+alteracaoX < largura)
+            mutante.setX(x+alteracaoX);
+        else if (x-alteracaoX >= 0 && x-alteracaoX < largura)
+            mutante.setX(x-alteracaoX);
+        
+        //Se já tem um ponto igual a esse mutante, remove ele
+        if (pontosIntermediarios.contains(mutante))
+            pontosIntermediarios.remove(mutante);
+
+        escolhido.setY(mutante.getY());
+        escolhido.setX(mutante.getX());
     }
     
+    /**
+     * Cruza 2 caminhos e retorna o caminho-filho.
+     * @param other Caminho a ser cruzado com this.
+     * @return Filho desses caminhos, combinando
+     *         seus pontos intermediários de
+     *         alguma forma.
+     */
     public Caminho cruzamento(Caminho other) {
         Caminho filho = new Caminho(pontoInicial, pontoFinal);
         int mediaY, mediaX;
         
+        //Se igual, junta pontosIntermediarios 1 a 1
         if (getNumIntermediarios() == other.getNumIntermediarios())
             for (int i=0; i < getNumIntermediarios(); i++)
             {
@@ -245,24 +274,24 @@ class Caminho {
                 mediaX = (getIntermediario(i).getX() + other.getIntermediario(i).getX()) / 2;
                 filho.addIntermediario(new Ponto(mediaY, mediaX));
             }
-        else {
-            if(getNumIntermediarios() == 0){
+        else { //Número diferente de pontos intermediários nos 2 caminhos
+            //Um com 1 e outro com N
+            if(getNumIntermediarios() == 1){
                 for (int i=0; i < other.getNumIntermediarios(); i++){
                     mediaY = (getIntermediario(0).getY() + other.getIntermediario(i).getY()) / 2;
                     mediaX = (getIntermediario(0).getX() + other.getIntermediario(i).getX()) / 2;
                     filho.addIntermediario(new Ponto(mediaY, mediaX));
                 }
             }
-            
-            else if(other.getNumIntermediarios() == 0){
+            else if(other.getNumIntermediarios() == 1){
                 for (int i=0; i < getNumIntermediarios(); i++){
                     mediaY = (getIntermediario(i).getY() + other.getIntermediario(0).getY()) / 2;
                     mediaX = (getIntermediario(i).getX() + other.getIntermediario(0).getX()) / 2;
                     filho.addIntermediario(new Ponto(mediaY, mediaX));
                 }
             }
-            
-            else if(getNumIntermediarios() == 1 && other.getNumIntermediarios() == 2){        
+            //Um com 2 e outro com 3
+            else if(getNumIntermediarios() == 2 && other.getNumIntermediarios() == 3){
                 mediaY = (getIntermediario(0).getY() + other.getIntermediario(0).getY()) / 2;
                 mediaX = (getIntermediario(0).getX() + other.getIntermediario(0).getX()) / 2;
                 filho.addIntermediario(new Ponto(mediaY, mediaX));
@@ -275,8 +304,7 @@ class Caminho {
                 mediaX = (getIntermediario(1).getX() + other.getIntermediario(2).getX()) / 2;
                 filho.addIntermediario(new Ponto(mediaY, mediaX));
             }
-            
-            else if(getNumIntermediarios() == 2 && other.getNumIntermediarios() == 1){
+            else if(other.getNumIntermediarios() == 2 && getNumIntermediarios() == 3){
                 mediaY = (getIntermediario(0).getY() + other.getIntermediario(0).getY()) / 2;
                 mediaX = (getIntermediario(0).getX() + other.getIntermediario(0).getX()) / 2;
                 filho.addIntermediario(new Ponto(mediaY, mediaX));
@@ -292,5 +320,12 @@ class Caminho {
         }
         
         return filho;
+    }
+    @Override
+    public String toString(){
+        String str = "";
+        for(Ponto p : pontosIntermediarios)
+            str = str.concat(p + " ");
+        return str;
     }
 }
