@@ -102,6 +102,7 @@ public class Labirinto {
         int col = coordenada.getX();
         boolean estaForaDosLimites = row < 0 || col < 0
                 || row >= altura || col >= largura;
+        
         if(estaForaDosLimites || cells[row][col] == '1')
             return false;
         return true;

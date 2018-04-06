@@ -21,12 +21,14 @@ public class T3_Genetico {
      */
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
-        Labirinto lab = null;
-        char[][] matrix = null;
+        Labirinto lab;
+        char[][] matrix;
         
-        System.out.println("Como o algoritmo genético só funcinoa se a saída "
-                + "puder ser alcançada seguindo 3 linhas retas da saída, é "
-                + "preciso fornecer uma matriz que satisfaça essas condições. \n");
+        System.out.println("O algoritmo genético só funciona se a saída "
+                + "puder ser alcançada seguindo até 3 linhas retas. "
+                + "Sendo assim, a matriz deve satisfazer essas condições "
+                + "para que uma solução válida (sem atravessar paredes) "
+                + "seja encontrada.\n");
         System.out.println("A primeira linha do arquivo deve conter 2 "
                 + "números no formato (N M), representando o número de "
                 + "linhas e colunas do labirinto.");
@@ -35,8 +37,7 @@ public class T3_Genetico {
         System.out.println(" 0 - caminho");
         System.out.println(" 1 - parede");
         System.out.println(" S - posição de spawn/início");
-        System.out.println(" E - final");
-        System.out.println();
+        System.out.println(" E - final \n");
         System.out.println("Digite o nome do arquivo contendo a matriz: ");
         String filename = input.next();
 

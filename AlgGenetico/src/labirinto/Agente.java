@@ -27,9 +27,6 @@ public class Agente {
         solucao = new ArrayList<>();
     }
     
-    /**
-     * "Liga" o agente.
-     */
     public void run(){
         System.out.println("Procurando solução...");
         algGenetico();
@@ -46,53 +43,63 @@ public class Agente {
     }
 
     public void algGenetico() {
-        int geracao = 0;
         Random rand = new Random();
-        
+
+        int geracao = 0;
         PriorityQueue<Caminho> populacao = new PriorityQueue<>(10, new CaminhoComparator());
         // Fila de prioridades com valores de fitness (menor valor = prioridade alta)
         
         inicializaPopulacao(populacao);
         for(Caminho individuo : populacao)
-            individuo.calculaFitness(labirinto);
-        
-        // Condiçao de parada -> numero de geraçoes
-        while (geracao < 10)
         {
+            for(int i=0; i < individuo.getNumIntermediarios(); i++)
+                System.out.print(individuo.getIntermediario(i) + " ");
+            
+            individuo.calculaFitness(labirinto);
+        }
+        
+        ArrayList<Caminho> maisAptos = new ArrayList<>();
+//        while (geracao < 10)
+//       {
             geracao++;
             
-            // maisAptos = seleciona n com maior fitness da populacao;
+            for(int i=0; i < 5; i++)
+                maisAptos.add(populacao.poll());
+            
             // calcula aptidao usando aquilo da roleta (pra ver as chances de cada
-            //  um ser escolhido nos cruzamentos
-            // cruza pares de maisAptos, com chance pequena (de 1 até 5%) de mutacao
-            // populacao.remove(maisFracos);
-            // populacao.add(filhos);
-        
-            for(Caminho s : populacao)
+            //  um ser escolhido nos cruzamentos)
+            
+            // cruza pares de maisAptos
+            
+            for(Caminho filho : maisAptos) //na verdade é pra cada filho
             {
-                s.calculaFitness();
-                
-                if(rand.nextInt(99) < 1)
-                {
-                    s.mutacao(labirinto.getAltura(),labirinto.getLargura());
-                }
+//                if(rand.nextInt(99) < 1)
+                    filho.mutacao(labirinto.getAltura(), labirinto.getLargura());
+
+                System.out.print("\nFez mutação: ");
+                for(int i=0; i < filho.getNumIntermediarios(); i++)
+                    System.out.print(filho.getIntermediario(i) + " ");
+
+                filho.calculaFitness(labirinto);
+                populacao.add(filho);
             }
-        }
+            
+            // populacao = 10 melhores de populacao
+//        }
     }
     private void inicializaPopulacao(PriorityQueue<Caminho> populacao) {
         Caminho individuo;
         int ymax = labirinto.getAltura();
         int xmax = labirinto.getLargura();
+        Ponto start = labirinto.getStart().getPonto();
+        Ponto exit = labirinto.getExit().getPonto();
         
         for(int i=0; i<10; i++)
         {
-            individuo = new Caminho(ymax, xmax);
+            individuo = new Caminho(start, exit, ymax, xmax);
             populacao.add(individuo);
         }
     }
-    /**
-     * Faz o agente percorrer a solução encontrada.
-     */
     public void walkThroughSolution(){
         for(Estado e : solucao)
         {
