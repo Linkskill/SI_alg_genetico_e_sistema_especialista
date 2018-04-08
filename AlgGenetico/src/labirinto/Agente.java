@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.PriorityQueue;
 import java.util.Random;
+import static javafx.application.Platform.exit;
 
 /**
  *
@@ -53,18 +54,26 @@ public class Agente {
         populacao.sort(comparator); //ordena por fitness
 
         int geracao = 0;
-        int ind1, ind2;
-        Caminho escolhido1, escolhido2, filho;
+        int ind1 = 0, ind2 = 0, totalFitness, roleta, indiceRoleta;
+        
+        //O normalizador nos ajuda a não termos problemas com casos onde o fitn-
+        //ess do indivíduo é negativo (Muitas paredes).
+        int normalizador = 10000;
+        Caminho escolhido1 = null, escolhido2 = null, filho;
        
         while (geracao < 5)
         {
+            totalFitness = 0;
             System.out.println("Geracao: " + geracao);
             System.out.println("\nPopulacao");
             for(Caminho individuo : populacao)
             {
                 System.out.print(individuo);
                 System.out.println(" com fitness " + individuo.getFitness());
+                totalFitness += individuo.getFitness();
             }
+            
+            System.out.println("\nFITNESS TOTAL: " + totalFitness + "\n");
             
             // calcula aptidao de cada um usando aquilo da roleta
             
@@ -73,15 +82,57 @@ public class Agente {
             // negócio da roleta)
             for(int i=0; i < 10; i++)
             {
-                //Por enquanto só escolhe 2 aleatórios,
-                //falta fazer o negócio da roleta
-                ind1 = rand.nextInt(populacao.size());
-                do {
-                    ind2 = rand.nextInt(populacao.size());
-                } while (ind1 == ind2);
                 
-                escolhido1 = populacao.get(ind1);
-                escolhido2 = populacao.get(ind2);
+                //Pega um número entre 0 e o fitness máximo - 1
+                roleta = rand.nextInt(totalFitness - 1);
+                System.out.println("SORTEADO: " + roleta);
+                
+                //Reverte a lista pros elementos com fitness maior
+                //virem por primeiro
+                Collections.reverse(populacao);
+                
+                //Reseta o indice da roleta para garantir que começa em 0
+                indiceRoleta = 0;
+                for(Caminho individuo : populacao){
+                    System.out.println(individuo.getFitness());
+                    roleta -= individuo.getFitness();
+                    if(roleta < 0){
+                        escolhido1 = populacao.get(indiceRoleta);
+                        break;
+                    }
+                    indiceRoleta++;
+                }
+                System.out.println("Fitness do escolhido 1: " + escolhido1.getFitness());
+                
+                do {
+                    roleta = rand.nextInt(totalFitness - 1);
+                    System.out.println("SORTEADO: " + roleta);
+                    
+                    indiceRoleta = 0;
+                    for(Caminho individuo : populacao){
+                        System.out.println(individuo.getFitness());
+                        roleta -= individuo.getFitness();
+                        if(roleta < 0){
+                            escolhido2 = populacao.get(indiceRoleta);
+                            break;
+                        }
+                        indiceRoleta++;
+                    }
+                    System.out.println("Fitness do escolhido 2: " + escolhido2.getFitness());
+                } while (escolhido1 == escolhido2);
+                    
+                //Para fins de referência,
+                //Deixei comentado o velho método de pegar dois aleatórios
+                //Remova os comentários se quiser.
+                // - JooJ
+                
+                //ind1 = rand.nextInt(populacao.size());
+                //do {
+                //    ind2 = rand.nextInt(populacao.size());
+                //} while (ind1 == ind2);
+                
+                //escolhido1 = populacao.get(ind1);
+                //escolhido2 = populacao.get(ind2);
                 
                 System.out.println("Vai cruzar: ");
                 System.out.println(escolhido1);
