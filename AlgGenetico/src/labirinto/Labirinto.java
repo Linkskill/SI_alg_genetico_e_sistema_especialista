@@ -30,6 +30,9 @@ public class Labirinto {
                     exit = new Estado(new Ponto(i, j));
         agente = null;
     }
+    public void setAgente(Agente a){
+        agente = a;
+    }
     /**
      * Posiciona o agente na matriz (se existir
      * um agente) e chama o método print().
@@ -106,9 +109,6 @@ public class Labirinto {
         if(estaForaDosLimites || cells[row][col] == '1')
             return false;
         return true;
-    }
-    public void setAgente(Agente a){
-        agente = a;
     }
     public int getAltura() { return altura; }
     public int getLargura() { return largura; }

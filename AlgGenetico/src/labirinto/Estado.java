@@ -34,8 +34,8 @@ public class Estado {
             return true;
         return false;
     }
-    @Override
     //Sempre que der Override no equals() precisa dar no hashCode() também
+    @Override
     public int hashCode() {
         int hash = 3;
         hash = 79 * hash + Objects.hashCode(this.ponto);

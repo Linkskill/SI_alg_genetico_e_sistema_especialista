@@ -5,8 +5,6 @@
  */
 package labirinto;
 
-import static java.lang.Math.abs;
-
 /**
  *
  * @author Gabriel Eugenio, Lincoln Batista e Jorge Straub
@@ -27,9 +25,6 @@ public class Ponto {
     public void setY(int y) {
         this.y = y;
     }
-    public int distanciaManhattan(Ponto other) {
-        return abs(x-other.getX()) + abs(y-other.getY());
-    }
     @Override
     public String toString() {
         return "(" + getY() + ", " + getX() + ")";
@@ -41,8 +36,8 @@ public class Ponto {
             return true;
         return false;
     }
-    @Override
     //Sempre que der Override no equals() precisa dar no hashCode() também
+    @Override
     public int hashCode() {
         int hash = 5;
         hash = 13 * hash + this.getX();

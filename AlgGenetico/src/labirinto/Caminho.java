@@ -7,18 +7,22 @@ package labirinto;
 
 import static java.lang.Math.abs;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 /**
  *
- * @author Saphira
+ * @author Gabriel Eugenio, Lincoln Batista e Jorge Straub
  */
 class Caminho {
     private Ponto pontoInicial;
     private Ponto pontoFinal;
-    private ArrayList<Ponto> pontosIntermediarios;
-    private ArrayList<Ponto> pontosCaminho;
+    private List<Ponto> pontosIntermediarios;
+    private List<Ponto> pontosCaminho;
     private int fitness;
+    private double aptidao;
     
     public Caminho (Ponto inicio, Ponto fim, int ymax, int xmax) {
         this(inicio, fim);
@@ -61,18 +65,18 @@ class Caminho {
         pontosIntermediarios.add(p);
         return true;
     }
+
     public Ponto getIntermediario(int i){
         if (i >= 0 && i < pontosIntermediarios.size())
             return pontosIntermediarios.get(i);
         return null;
     }
     public int getNumIntermediarios() { return pontosIntermediarios.size(); }
-    public ArrayList<Ponto> getCaminho() {
-        //como retornar uma cópia não modificável?
-        return pontosCaminho;
+
+    public List<Ponto> getCaminho() {
+        return Collections.unmodifiableList(pontosCaminho);
     }
     public int getNumPontosCaminho() { return pontosCaminho.size(); }
-    
 
     /**
      * Calcula o fitness (adequabilidade) deste caminho.
@@ -86,13 +90,13 @@ class Caminho {
         pontosQuePassa.add(pontoInicial);
         pontosQuePassa.addAll(pontosIntermediarios);
         pontosQuePassa.add(pontoFinal);
-        
+
         montaCaminho(pontosQuePassa);
         
         fitness = pontosCaminho.size()-1;
         for (Ponto p : pontosCaminho)
             if (!labirinto.isAccessible(p))
-                fitness += 10;
+                fitness += 15;
     }
     
     /**
@@ -116,12 +120,16 @@ class Caminho {
      * Monta um segmento de caminho.
      * Imaginando uma linha reta indo de um ponto a outro,
      * o caminho é composto pelos pontos/posições no
-     * grid que melhor se adequam à esta reta.
+     * grid que melhor se adequam à esta reta. Veja:
+     * https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
      * @param inicioSeg Ponto de início do segmento
      * @param fimSeg Ponto de fim do segmento
      */
     private void montaSegmentoCaminho(Ponto inicioSeg, Ponto fimSeg)
     {
+        if(inicioSeg.equals(fimSeg))
+            return;
+        
         int x1,y1,x2,y2;
         x1 = inicioSeg.getX();
         y1 = inicioSeg.getY();
@@ -231,12 +239,12 @@ class Caminho {
         int x = escolhido.getX();
         
         Ponto mutante = new Ponto(y,x);
-        //Verifica se a alteração iria sair do grid,
-        //se iria então tenta com sinal invertido.
 
-        //Se com sinal invertido também sairia da grid,
-        //não modifica (pode acontecer quando alguma
-        //das dimensões da grid é < 4)
+        /* Verifica se a alteração iria sair do grid,
+        se iria então tenta com sinal invertido.
+            Se com sinal invertido também sairia,
+        não modifica (pode acontecer quando alguma
+        das dimensões da grid é < 4) */
         if(y+alteracaoY >= 0 && y+alteracaoY < altura)
             mutante.setY(y+alteracaoY);
         else if (y-alteracaoY >= 0 && y-alteracaoY < altura)
@@ -247,13 +255,12 @@ class Caminho {
         else if (x-alteracaoX >= 0 && x-alteracaoX < largura)
             mutante.setX(x-alteracaoX);
         
-        //Se já tem um ponto igual a esse mutante, remove ele
-        if (pontosIntermediarios.contains(mutante))
-            pontosIntermediarios.remove(mutante);
-
         escolhido.setY(mutante.getY());
         escolhido.setX(mutante.getX());
     }
+
+    public double getAptidao() { return aptidao; }
+    public void setAptidao(double aptidao) { this.aptidao = aptidao; }
     
     /**
      * Cruza 2 caminhos e retorna o caminho-filho.
@@ -327,5 +334,30 @@ class Caminho {
         for(Ponto p : pontosIntermediarios)
             str = str.concat(p + " ");
         return str;
+    }
+    @Override
+    public boolean equals(Object other){
+        //É igual se ambos tem o mesmo número de pontos intermediários
+        //e os pontos correspondem 1 a 1 (1º ponto de c1 igual ao 1º ponto de c2...)
+        Caminho c = (Caminho)other;
+        if(getNumIntermediarios() == c.getNumIntermediarios())
+        {
+            for(int i=0; i < getNumIntermediarios(); i++)
+                if(!getIntermediario(i).equals(c.getIntermediario(i)))
+                    return false;
+            return true;
+        }
+        return false;
+    }
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 61 * hash + Objects.hashCode(this.pontoInicial);
+        hash = 61 * hash + Objects.hashCode(this.pontoFinal);
+        hash = 61 * hash + Objects.hashCode(this.pontosIntermediarios);
+        hash = 61 * hash + Objects.hashCode(this.pontosCaminho);
+        hash = 61 * hash + this.fitness;
+        hash = 61 * hash + (int) (Double.doubleToLongBits(this.aptidao) ^ (Double.doubleToLongBits(this.aptidao) >>> 32));
+        return hash;
     }
 }
