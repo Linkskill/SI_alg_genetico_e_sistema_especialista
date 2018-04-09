@@ -54,13 +54,13 @@ public class Agente {
         CaminhoComparator comparator = new CaminhoComparator();
         
         int geracao = 0;
-        int N=10;
+        int N=20;
         inicializaPopulacao(populacao, N);
         populacao.sort(comparator); //ordena por fitness
 
         Caminho escolhido1, escolhido2, filho;
        
-        while (geracao < 10)
+        while (geracao < 50)
         {
             System.out.println("\nGeracao: " + geracao);
             System.out.println("Populacao");
@@ -99,13 +99,19 @@ public class Agente {
                 //Isso evita convergências (ie. ter um monte de
                 //indivíduos iguais que, quando cruzados, só geram
                 //outros iguais à ele).
-                if(populacao.contains(filho))
+                if(!populacao.contains(filho))
                     populacao.add(filho);
             }
+
+            populacao.sort(comparator);
             
+            //Se não teve nenhum filho diferente,
+            //convergiu, para
+            if(populacao.size() == N)
+                break;
+
             //Remove os mais fracos, fica somente com
             //os N melhores pra nova população
-            populacao.sort(comparator);
             for(int i=populacao.size()-1; i >= N; i--)
                 populacao.remove(i);
             
